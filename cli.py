@@ -1,0 +1,11 @@
+import argparse, json, requests
+p=argparse.ArgumentParser(description='Profile matching CLI')
+p.add_argument('--url',default='http://localhost:8080')
+s=p.add_subparsers(dest='command',required=True)
+a=s.add_parser('submitResume'); a.add_argument('--name',required=True); a.add_argument('--skills',required=True,help='Comma-separated skills')
+a=s.add_parser('profile'); a.add_argument('id')
+a=s.add_parser('top3Matching'); a.add_argument('id')
+args=p.parse_args()
+if args.command=='submitResume': r=requests.post(args.url+'/submitResume',json={'name':args.name,'skills':args.skills.split(',')},timeout=15)
+else: r=requests.get(args.url+'/'+args.command+'/'+args.id,timeout=15)
+print(json.dumps(r.json(),indent=2)); r.raise_for_status()

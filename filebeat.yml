@@ -1,0 +1,11 @@
+filebeat.inputs:
+  - type: filestream
+    id: docker-logs
+    paths:
+      - /var/lib/docker/containers/*/*.log
+    parsers:
+      - container:
+          stream: all
+          format: auto
+output.logstash:
+  hosts: ["logstash:5044"]
